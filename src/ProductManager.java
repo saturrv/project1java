@@ -14,6 +14,7 @@ public class ProductManager {
             System.out.println("3. Оновити продукт");
             System.out.println("4. Видалити продукт");
             System.out.println("5. Сортувати продукти");
+            System.out.println("6. Пошук продуктів");
             System.out.println("0. Вихід");
             System.out.print("Виберіть опцію: ");
             choice = Integer.parseInt(scanner.nextLine());
@@ -24,11 +25,13 @@ public class ProductManager {
                 case 3 -> updateProduct();
                 case 4 -> deleteProduct();
                 case 5 -> sortProducts();
+                case 6 -> searchProducts();
                 case 0 -> System.out.println("До побачення!");
                 default -> System.out.println("Невірна опція!");
             }
         } while (choice != 0);
     }
+
 
     private static void createProduct() {
         System.out.print("Введіть назву: ");
@@ -103,9 +106,52 @@ public class ProductManager {
                 System.out.println("Невірна опція!");
                 return;
             }
+
         }
+
         readProducts();
+
     }
+
+    private static void searchProducts() {
+        System.out.println("\nПошук за критеріями:");
+        System.out.println("1. За назвою");
+        System.out.println("2. За максимальною ціною");
+        System.out.print("Виберіть опцію: ");
+        int option = Integer.parseInt(scanner.nextLine());
+
+        switch (option) {
+            case 1 -> {
+                System.out.print("Введіть назву або її частину: ");
+                String keyword = scanner.nextLine().toLowerCase();
+                List<Product> results = products.stream()
+                        .filter(p -> p.getName().toLowerCase().contains(keyword))
+                        .toList();
+
+                displaySearchResults(results);
+            }
+            case 2 -> {
+                System.out.print("Введіть максимальну ціну: ");
+                double maxPrice = Double.parseDouble(scanner.nextLine());
+                List<Product> results = products.stream()
+                        .filter(p -> p.getPrice() <= maxPrice)
+                        .toList();
+
+                displaySearchResults(results);
+            }
+            default -> System.out.println("Невірна опція.");
+        }
+    }
+
+    private static void displaySearchResults(List<Product> results) {
+        if (results.isEmpty()) {
+            System.out.println("Нічого не знайдено.");
+        } else {
+            System.out.println("Знайдені продукти:");
+            results.forEach(System.out::println);
+        }
+    }
+
 }
 
 
