@@ -11,18 +11,36 @@ public class Product {
         this.note = note;
     }
 
-    // Геттери та сеттери
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public double getPrice() { return price; }
-    public String getNote() { return note; }
+    public int getId() {
+        return id;
+    }
 
-    public void setName(String name) { this.name = name; }
-    public void setPrice(double price) { this.price = price; }
-    public void setNote(String note) { this.note = note; }
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
     @Override
     public String toString() {
-        return "ID: " + id + " | Назва: " + name + " | Ціна: " + price + " | Примітка: " + note;
+        return String.format("ID: %d | Назва: %s | Ціна: %.2f | Примітка: %s", id, name, price, note);
     }
 }

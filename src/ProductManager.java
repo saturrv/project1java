@@ -13,16 +13,17 @@ public class ProductManager {
             System.out.println("2. Показати всі продукти");
             System.out.println("3. Оновити продукт");
             System.out.println("4. Видалити продукт");
+            System.out.println("5. Сортувати продукти");
             System.out.println("0. Вихід");
             System.out.print("Виберіть опцію: ");
             choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
-
                 case 1 -> createProduct();
                 case 2 -> readProducts();
                 case 3 -> updateProduct();
                 case 4 -> deleteProduct();
+                case 5 -> sortProducts();
                 case 0 -> System.out.println("До побачення!");
                 default -> System.out.println("Невірна опція!");
             }
@@ -81,7 +82,30 @@ public class ProductManager {
         }
         System.out.println("Продукт не знайдено.");
     }
-}
 
+    private static void sortProducts() {
+        System.out.println("\nСортування за критеріями:");
+        System.out.println("1. Назва (А-Я)");
+        System.out.println("2. Ціна (від меншої до більшої)");
+        System.out.print("Виберіть опцію: ");
+        int option = Integer.parseInt(scanner.nextLine());
+
+        switch (option) {
+            case 1 -> {
+                products.sort(Comparator.comparing(Product::getName));
+                System.out.println("Відсортовано за назвою:");
+            }
+            case 2 -> {
+                products.sort(Comparator.comparingDouble(Product::getPrice));
+                System.out.println("Відсортовано за ціною:");
+            }
+            default -> {
+                System.out.println("Невірна опція!");
+                return;
+            }
+        }
+        readProducts();
+    }
+}
 
 
