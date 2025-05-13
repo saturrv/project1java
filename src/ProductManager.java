@@ -1,11 +1,19 @@
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 
 public class ProductManager {
     private static List<Product> products = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
     private static int idCounter = 1;
+    private static final String FILE_NAME = "products.json";
 
     public static void main(String[] args) {
+        loadFromFile();
+
         int choice;
         do {
             System.out.println("\n=== Меню ===");
@@ -20,10 +28,19 @@ public class ProductManager {
             choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
-                case 1 -> createProduct();
+                case 1 -> {
+                    createProduct();
+                    saveToFile();
+                }
                 case 2 -> readProducts();
-                case 3 -> updateProduct();
-                case 4 -> deleteProduct();
+                case 3 -> {
+                    updateProduct();
+                    saveToFile();
+                }
+                case 4 -> {
+                    deleteProduct();
+                    saveToFile();
+                }
                 case 5 -> sortProducts();
                 case 6 -> searchProducts();
                 case 0 -> System.out.println("До побачення!");
@@ -31,7 +48,6 @@ public class ProductManager {
             }
         } while (choice != 0);
     }
-
 
     private static void createProduct() {
         System.out.print("Введіть назву: ");
@@ -106,11 +122,9 @@ public class ProductManager {
                 System.out.println("Невірна опція!");
                 return;
             }
-
         }
 
         readProducts();
-
     }
 
     private static void searchProducts() {
@@ -152,6 +166,26 @@ public class ProductManager {
         }
     }
 
+    private static void saveToFile() {
+        try (Writer writer = new FileWriter(FILE_NAME)) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            gson.toJson(products, writer);
+        } catch (IOException e) {
+            System.out.println("Помилка при збереженні: " + e.getMessage());
+        }
+    }
+
+    private static void loadFromFile() {
+        File file = new File(FILE_NAME);
+        if (file.exists()) {
+            try (Reader reader = new FileReader(file)) {
+                Gson gson = new Gson();
+                Type listType = new TypeToken<ArrayList<Product>>() {}.getType();
+                products = gson.fromJson(reader, listType);
+                idCounter = products.stream().mapToInt(Product::getId).max().orElse(0) + 1;
+            } catch (IOException e) {
+                System.out.println("Помилка при зчитуванні: " + e.getMessage());
+            }
+        }
+    }
 }
-
-
